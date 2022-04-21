@@ -1,0 +1,141 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.notes {
+    display: flex;
+    height: 100%;
+}
+
+.notes * {
+    font-family: sans-serif;
+}
+
+.notes_sidebar {
+    border-right: 2px solid #dddddd;
+    flex-shrink: 0;
+    overflow-y: auto;
+    padding: 1em;
+    
+    width: 300px;
+   
+}
+
+.add_note,.delete_note {
+    color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: 0.75em 0;
+    width: 100%;
+}
+
+#search{
+    width: 80%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 5px;
+}
+.undo{
+    width: 15%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.add_note{
+    background: #009578;
+    
+
+}
+
+.add_note:hover {
+    background: #00af8c;
+}
+
+.delete_note{
+    background: #c5190d;
+    position: sticky;
+    bottom: 0%;
+    
+
+}
+.delete_note:hover {
+    background: #f0291b;
+}
+
+.note_item {
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+
+.note_item--selected {
+    background: #eeeeee;
+    border-radius: 7px;
+    font-weight: bold;
+}
+
+
+.lnote_title,
+.lnote_updated {
+    padding: 10px;
+}
+
+.lnote_title {
+    font-size: 1.2em;
+}
+
+.lnote_body {
+    padding: 0 10px;
+}
+
+.lnote_updated {
+    font-size: .75rem;
+    color: #aaaaaa;
+    font-style: italic;
+    text-align: right;
+}
+
+.notes_preview {
+    display: flex;
+    flex-direction: column;
+    padding: 2em 3em;
+    flex-grow: 1;
+}
+
+.note_title,
+.note_body {
+    border: none;
+    outline: none;
+    width: 100%;
+}
+
+.note_title {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.note_body {
+    flex-grow: 1;
+    font-size: 1.2em;
+    line-height: 1.5;
+    margin-top: 2em;
+    resize: none;
+}
+
+.hide{
+    display: none;
+}
+
+.draggable{
+    cursor: grab;
+   
+}
+.draggable .dragging{
+    opacity:.5;
+}
