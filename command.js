@@ -1,5 +1,4 @@
 import NotesAPI from "./API.js";
-import App from "./app.js";
 
 class CommandManager{
     constructor() {
@@ -29,6 +28,7 @@ class AddNoteCommand{
         NotesAPI.saveNote(newNote);
         const notes= NotesAPI.getAllNotes();
         this.noteId= notes[0].id;
+        
         
     }
     undo(){
@@ -77,8 +77,8 @@ class DeleteNoteCommand{
 
 
     }
-}
 
+}
 
 export{CommandManager,AddNoteCommand,DeleteNoteCommand,EditNoteCommand};
 

@@ -1,36 +1,19 @@
 export default class NotesView {
-    constructor(root, { onNoteSelect, onNoteAdd, onNoteEdit, onNoteDelete, onNoteSearch, onUndo } = {}){
+    constructor(root, { onNoteSelect, onNoteAdd, onNoteEdit, onNoteDelete, onNoteSwitch, onNoteSearch, onUndo } = {}){
         this.root=root;
         this.onNoteSelect=onNoteSelect;
         this.onNoteAdd=onNoteAdd;
         this.onNoteEdit=onNoteEdit;
         this.onNoteDelete=onNoteDelete;
         this.onNoteSearch=onNoteSearch;
+        this.onNoteSwitch=onNoteSwitch;
         this.onUndo =onUndo;
-        this.root.innerHTML=`
-            <div class="notes_sidebar">
-                <button class="add_note" type="button">Add note</button>
-                <div class="search-wrapper">  
-                    <label for="search" > </label>
-                    <input type="search" placeholder="Search..." id="search" data-search>
-                    <button id="undo_btn" type="button"> undo </button>
-                </div>
-               
-
-                <div class="note_list"> </div>
-                <button class="delete_note" type="button">Delete note</button>
-            </div>
-            <div class="notes_preview">
-                <input class="note_title" type="text" placeholder="New note">
-                <textarea class="note_body" placeholder="Enter your text here"></textarea>
-                
-            </div>
-            `;
         this.preview =this.root.querySelector(".notes_preview");
         this.note_title=this.root.querySelector(".note_title");
         this.note_body=this.root.querySelector(".note_body");
         this.notesListContainer = this.root.querySelector(".note_list");
         this.lnotes=this.notesListContainer.querySelectorAll(".note_item");
+        this.template1 = this.root.querySelector("#temp_note_item");
         
         const btnAddNote = this.root.querySelector(".add_note");
         const btnDeleteNote = this.root.querySelector(".delete_note");
@@ -81,18 +64,32 @@ export default class NotesView {
         container.addEventListener("dragend", e =>{
             const draggable = e.target;
             draggable.classList.remove("dragging");
-        
+            const beforeElement = getDragAfterElement(container, e.clientY);
+            console.log(beforeElement);
+            const id1 = draggable.getAttribute("data-note-id");
+            if (beforeElement ==null){
+                this.onNoteSwitch(id1, null) 
+            }
+            else{
+                const id2 = beforeElement.getAttribute("data-note-id");
+                this.onNoteSwitch(id1, id2) 
+            }
         })
+
+
           
         container.addEventListener("dragover",e =>{
             e.preventDefault();
             const afterElement = getDragAfterElement(container, e.clientY);
             const draggable = this.root.querySelector(".dragging");
+            
             if (afterElement== null){
                 container.appendChild(draggable);
+
             }
             else{
-                container.insertBefore(draggable,afterElement) 
+                container.insertBefore(draggable,afterElement)
+                
             }
              
         })
@@ -133,21 +130,15 @@ export default class NotesView {
 
     createListItemHTML(id,title,body,updated,creation){
         const MAX_BODY_LENGTH=60;
-
-        return `
-        <div class="note_item draggable" draggable="true" data-note-id="${id}">
-            <div class="lnote_title">${title}</div>
-            <div class="lnote_body">
-            ${body.substring(0,MAX_BODY_LENGTH)}
-            ${body.length > MAX_BODY_LENGTH ? "...":""}
-            </div>
-            <div class="lnote_updated">Created on: ${creation.toLocaleString('en-us', {dateStyle :"full", timeStyle: "short"})}
-            </div>
-            <div class="lnote_updated">
-            Last edit: ${updated.toLocaleString('en-us', {dateStyle :"full", timeStyle: "short"})}
-            </div>
-        </div>
-        `;
+        var clone = this.template1.content.cloneNode(true);
+        clone.querySelector(".note_item").setAttribute("data-note-id",`${id}`);
+        clone.querySelector(".lnote_title").textContent = title;
+        clone.querySelector(".lnote_body").textContent = body.substring(0,MAX_BODY_LENGTH) + (body.length > MAX_BODY_LENGTH ? "...":"");
+        clone.querySelector(".lnote_updated").textContent = `Created on: ${creation.toLocaleString('en-us', {dateStyle :"full", timeStyle: "short"})} \n
+        Last edit: ${updated.toLocaleString('en-us', {dateStyle :"full", timeStyle: "short"})}`;
+            
+        this.notesListContainer.appendChild(clone);
+        
     }
 
     updateNotesList(notes){
@@ -158,7 +149,6 @@ export default class NotesView {
         for(const note of notes){
             const html =this.createListItemHTML(note.id, note.title,note.body, new Date(note.updated),new Date(note.creation));
 
-            this.notesListContainer.insertAdjacentHTML("beforeend", html);
         }
 
         
@@ -171,10 +161,7 @@ export default class NotesView {
             
 
             });
-
-
     }
-
     updateActiveNote(note){
         this.note_title.value=note.title;
         this.note_body.value=note.body;

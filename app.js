@@ -39,20 +39,21 @@ export default class App{
 
             onNoteAdd: ()=>{
                 this.commandMan.executeCommand(new AddNoteCommand());
-                console.log(this.commandMan.history);
                 this.refreshNotes();
             },
 
             onNoteEdit: ( title, body)=>{
                this.commandMan.executeCommand(new EditNoteCommand(this.activeNote),title,body);
-               console.log(this.commandMan.history)
                this.refreshNotes();
             },
 
             onNoteDelete: ()=>{
                 this.commandMan.executeCommand(new DeleteNoteCommand(this.activeNote));
-                console.log(this.commandMan.history)
                 this.refreshNotes();
+            },
+
+            onNoteSwitch: (id1, id2)=>{
+                NotesAPI.switchNotes(id1,id2);
             },
 
             onNoteSearch: (input)=>{
@@ -63,7 +64,6 @@ export default class App{
 
             onUndo: ()=>{
                 this.commandMan.undoCommand();
-                console.log(this.commandMan.history)
                 this.refreshNotes();
             }
         };

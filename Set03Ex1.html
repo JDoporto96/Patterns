@@ -10,8 +10,30 @@
 </head>
 <body>
     <div class="notes" id="app">
-       
-      
+        <div class="notes_sidebar">
+            <button class="add_note" type="button">Add note</button>
+            <div class="search-wrapper">  
+                <label for="search" > </label>
+                <input type="search" placeholder="Search..." id="search" data-search>
+                <button id="undo_btn" type="button"> undo </button>
+            </div>
+           
+
+            <div class="note_list"> </div>
+            <button class="delete_note" type="button">Delete note</button>
+        </div>
+        <div class="notes_preview">
+            <input class="note_title" type="text" placeholder="New note">
+            <textarea class="note_body" placeholder="Enter your text here"></textarea> 
+        </div>
+
+        <template id="temp_note_item">
+        <div class="note_item draggable" draggable="true">
+        <div class="lnote_title"></div>
+        <div class="lnote_body"></div>
+        <div class="lnote_updated"></div>
+        </div>
+        </template>
     </div>
     <script src="./main.js" type="module"></script>
 </body>
