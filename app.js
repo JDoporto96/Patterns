@@ -1,6 +1,6 @@
 import NotesView from "./view.js";
 import NotesAPI from "./API.js";
-import { CommandManager, AddNoteCommand, DeleteNoteCommand, EditNoteCommand } from "./command.js";
+import { CommandManager, AddNoteCommand, DeleteNoteCommand, EditNoteCommand, SwitchNoteCommand } from "./command.js";
 
 export default class App{
     constructor(root){
@@ -16,6 +16,17 @@ export default class App{
         this.setNotes(notes);
         if (notes.length > 0){
             this.setActiveNote(notes[0]);
+        }
+        if(notes.length==0){
+            const deleteBtn = this.view.deleteBtn;
+            const searchBar =this.view.searchBar;
+            deleteBtn.style.visibility="hidden";
+            searchBar.style.visibility="hidden";
+        }else{
+            const deleteBtn = this.view.deleteBtn;
+            const searchBar =this.view.searchBar;
+            deleteBtn.style.visibility="visible";
+            searchBar.style.visibility="visible";
         }
     }
 
@@ -53,7 +64,8 @@ export default class App{
             },
 
             onNoteSwitch: (id1, id2)=>{
-                NotesAPI.switchNotes(id1,id2);
+                this.commandMan.executeCommand(new SwitchNoteCommand(id1,id2));
+                this.refreshNotes();
             },
 
             onNoteSearch: (input)=>{

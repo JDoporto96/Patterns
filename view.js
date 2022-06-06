@@ -14,7 +14,9 @@ export default class NotesView {
         this.notesListContainer = this.root.querySelector(".note_list");
         this.lnotes=this.notesListContainer.querySelectorAll(".note_item");
         this.template1 = this.root.querySelector("#temp_note_item");
-        
+        this.deleteBtn = this.root.querySelector(".delete_note");
+        this.searchBar =this.root.querySelector("#search");
+
         const btnAddNote = this.root.querySelector(".add_note");
         const btnDeleteNote = this.root.querySelector(".delete_note");
         const undoBtn=this.root.querySelector("#undo_btn");
@@ -43,6 +45,10 @@ export default class NotesView {
             if(doDelete){
                 this.onNoteDelete();
             }
+
+            
+               
+            
         });
 
 
@@ -65,7 +71,6 @@ export default class NotesView {
             const draggable = e.target;
             draggable.classList.remove("dragging");
             const beforeElement = getDragAfterElement(container, e.clientY);
-            console.log(beforeElement);
             const id1 = draggable.getAttribute("data-note-id");
             if (beforeElement ==null){
                 this.onNoteSwitch(id1, null) 
